@@ -1,0 +1,14 @@
+{
+  "name": "frozor-commands",
+  "version": "2.1.13",
+  "description": "Command system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^1.1.3"
+  }
+}
