@@ -1,33 +1,33 @@
-#Frozor Commands
+# Frozor Commands
 
 Easy to use command creation system!
 
-##Installation
+## Installation
 `npm i --save frozor-commands`
 
 *Note: This documentation is unfinished.*
 
-##Usage
+## Usage
 
 The module exports properties equivalent to the classes listed below, e.g. FrozorCommands.Command
 
-###CommandArg Class
-####Description
+### CommandArg Class
+#### Description
 Use this class to populate your command's arguments array. Type is not validated, but is useful for users.
 
-####Constructor
+#### Constructor
 `<String name>, [String type], [Boolean required (default true)]`
 
-####Properties
+#### Properties
 
 * name: the name of the command arg (required)
 * type: the type of the command arg (optional)
 * required: whether the command arg should be required (default true),
 * hide: whether the command arg should be hidden (default false)
 
-####Methods
+#### Methods
 
-####getVariableArgs (Static)
+#### getVariableArgs (Static)
 Returns an array of CommandArg instances based on the call parameters (count, name, type, required).
 
 The first instance will be not hidden, and will have `[]` after the type to show that there may be multiple (or type will be equal to `[]` if none is set)
@@ -80,7 +80,7 @@ class SayHello extends Command{
 }
 ```
 
-####getUsageString
+#### getUsageString
 Returns a string based on whether the arg is hidden, its type, and if it is required.
 
 Required commands have arrow brackets (<>) around them, optional ones have square brackets ([]) around them. 
@@ -89,12 +89,12 @@ Example return value for optional with type `String` and name `text`: `[String t
 
 Example return value for required with type `String` and name `text`: `<String text>`
 
-###Command Class
+### Command Class
 
-####Constructor
+#### Constructor
 `<String name>, [Array aliases], [String description], [Array<CommandArg> args], [String type], [Array allowedUsers]`
 
-####Properties
+#### Properties
 * name: the name of the command, what users have to type to execute it
 * aliases: an array containing all alternative names users can type in order to run your command
 * description: the description of the command, useful if you write a help command
@@ -107,9 +107,9 @@ Example return value for required with type `String` and name `text`: `<String t
 If you want to use allowedUsers, you should override Command.prototype.canRun !
 
 
-####Methods
+#### Methods
 
-#####getUsageStatement
+##### getUsageStatement
 
 This method returns a string which contains the name of the command and all of its CommandArgs' usage strings. This also filters out any usage statements that are undefined or are equal to '', so it does not return hidden ones.
 
@@ -123,7 +123,7 @@ An example output would look something like one of these:
 
 `whois <SlackMention user>`
 
-#####canRun
+##### canRun
 
 This method must be synchronous (at least for the time being) and return a boolean indicating whether the command can be run. It is passed args (msg, bot, extra). You do not have to include this method, because by default it just reutrns true.
 
@@ -143,7 +143,7 @@ Command.prototype.canRun = function (msg, bot) {
 };
 ```
 
-####run
+#### run
 
 This is the method called when a user actually runs your command. It is passed the args (msg, bot, extra).
 
@@ -151,17 +151,17 @@ Nothing needs to be returned, so this may be async.
 
 If your method raises an unhandled exception, the CommandHandler will let the user know an exception occurred.
 
-###CommandHandler
+### CommandHandler
 
-####Description
+#### Description
 
 Handles commands, of course! This is where commands are registered and run.
 
-####Constructor
+#### Constructor
 
 `SomeBot bot, Object messageFormatter`
 
-####Properties
+#### Properties
 
 * bot: this is the bot that is, by default, passed to all commands. You can omit this when instantiating the class, but you should probably pass it in the `handle` method if you do that.
 * formatter: this is an object which contains methods for formatting messages. All formatters are used in a `message.reply` call, with the exception of logger which is used for `console.log`. Unless otherwise noted, the method takes the parameters (message, command, bot)
@@ -187,17 +187,17 @@ const commands = new CommandHandler(MyBot, {
 });
 ```
 
-####Methods
+#### Methods
 
-#####add
+##### add
 
 Takes arguments (name, command) and adds it to the commands list
 
-#####register
+##### register
 
 Takes a Command argument and adds it and all its aliases to the commands list by calling `add`
 
-#####process
+##### process
 
 This is how commands are processed. This takes arguments (message, extra, bot), where
 
@@ -221,7 +221,7 @@ This method does all the following:
 * Calls the method runCommand
     * If an error is caught (since the call is wrapped in a try catch), this is where the `error` formatter is used
     
-##Putting It All Together
+## Putting It All Together
 
 This example uses the frozor-slackbot api
 
