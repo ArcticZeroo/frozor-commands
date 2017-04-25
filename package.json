@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords":["commands", "command", "frozor", "command maker", "command base", "command parse", "argument parse", "command handler", "slack commands"],
   "author": "",
   "license": "ISC",
   "dependencies": {
