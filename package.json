@@ -1,6 +1,6 @@
 {
   "name": "frozor-commands",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "description": "Command system",
   "main": "index.js",
   "scripts": {
