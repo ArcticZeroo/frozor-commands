@@ -244,7 +244,7 @@ class HelloCommand extends Command{
 
 class SpeedCommand extends Command{
     constructor(){
-        super('speed', ['ping', 'speedtest', 'pingtest], 'See how long it takes to process a command!')
+        super('speed', ['ping', 'speedtest', 'pingtest'], 'See how long it takes to process a command!')
     }
     
     run(message, bot, extra){
@@ -258,9 +258,9 @@ bot.commands.register(new SpeedCommand());
 bot.init();
 
 bot.on('message', (msg)=>{
-    if(msg.startsWith('!'){
-        msg.args = msg.text.split(' ')
-        msg.commandName = msg.args.shift().substr(1)
+    if(msg.startsWith('!')){
+        msg.args = msg.text.split(' ');
+        msg.commandName = msg.args.shift().substr(1);
         bot.commands.process(msg, {startTime: Date.now()});
     }
 });
