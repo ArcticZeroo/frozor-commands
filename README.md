@@ -89,6 +89,27 @@ Example return value for optional with type `String` and name `text`: `[String t
 
 Example return value for required with type `String` and name `text`: `<String text>`
 
+#### parseArgs
+Returns an object based on parsed arguments in an array.
+
+Properties can be represented in a few ways
+* key=value
+* key="value with spaces"
+* --key value
+* --key value with spaces
+ 
+For instance:
+
+`['--prop', 'hello', 'world', 'how', 'are', 'you']` will return `{prop: 'hello world how are you'}`
+
+`['prop="', 'hello', 'world', 'how', 'are', 'you"']` will return `{prop: 'hello world how are you'}`
+
+Dash properties without a key will be set to true.
+
+`['--prop', '--prop2']` will return `{prop: true, prop2: true}`
+
+key=value properties that attempt to include spaces without quotation marks will be set to the value before the first space. If there is no closing quotation, it will also be set to the first value before the space.
+
 ### Command Class
 
 #### Constructor
