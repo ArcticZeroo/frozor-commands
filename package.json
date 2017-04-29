@@ -1,12 +1,22 @@
 {
   "name": "frozor-commands",
-  "version": "2.1.16",
+  "version": "3.0.0",
   "description": "Command system",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords":["commands", "command", "frozor", "command maker", "command base", "command parse", "argument parse", "command handler", "slack commands"],
+  "keywords": [
+    "commands",
+    "command",
+    "frozor",
+    "command maker",
+    "command base",
+    "command parse",
+    "argument parse",
+    "command handler",
+    "slack commands"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
