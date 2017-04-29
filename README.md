@@ -146,14 +146,14 @@ An example output would look something like one of these:
 
 ##### canRun
 
-This method must be synchronous (at least for the time being) and return a boolean indicating whether the command can be run. It is passed args (msg, bot, extra). You do not have to include this method, because by default it just reutrns true.
+This method must be async (using the node 7.6+ keyword) and return a boolean indicating whether the command can be run. It is passed args (msg, bot, extra). You do not have to include this method, because by default it just reutrns true.
 
 In some cases, you may want to override canRun for all commands in your program. You can do so by overriding the prototype for canRun.
 
 Example usage (with frozor-slackbot API):
 
 ```javascript
-Command.prototype.canRun = function (msg, bot) {
+Command.prototype.canRun = async function (msg, bot) {
     if(this.allowedUsers.length > 0){
         if(bot.api.cache.users.hasOwnProperty(msg.user.id)){
             return (this.allowedUsers.indexOf(bot.api.cache.users[msg.user.id].name) > -1);
@@ -168,7 +168,7 @@ Command.prototype.canRun = function (msg, bot) {
 
 This is the method called when a user actually runs your command. It is passed the args (msg, bot, extra).
 
-Nothing needs to be returned, so this may be async.
+This must use node's `async` keyword, but nothing needs to be returned.
 
 If your method raises an unhandled exception, the CommandHandler will let the user know an exception occurred.
 
@@ -258,7 +258,7 @@ class HelloCommand extends Command{
         super('hello', ['hi', 'hey'], 'Say hi!', CommandArg.getVariableArgs(300, 'text', 'String', false))
     }
     
-    run(message){
+    async run(message){
         message.reply('Hey there!')
     }
 }
@@ -268,7 +268,7 @@ class SpeedCommand extends Command{
         super('speed', ['ping', 'speedtest', 'pingtest'], 'See how long it takes to process a command!')
     }
     
-    run(message, bot, extra){
+    async run(message, bot, extra){
         message.reply(`I took \`${Date.now() - extra.startTime}\` ms to process and run that command.`)
     }
 }
