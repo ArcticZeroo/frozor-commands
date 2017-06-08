@@ -113,9 +113,10 @@ key=value properties that attempt to include spaces without quotation marks will
 ### Command Class
 
 #### Constructor
-`<String name>, [Array aliases], [String description], [Array<CommandArg> args], [String type], [Array allowedUsers]`
+`<Object options>`
 
 #### Properties
+(These are properties you can pass into the options object)
 * name: the name of the command, what users have to type to execute it
 * aliases: an array containing all alternative names users can type in order to run your command
 * description: the description of the command, useful if you write a help command
@@ -123,10 +124,9 @@ key=value properties that attempt to include spaces without quotation marks will
 * maxArgs: a number set to the length of args
 * minArgs: a number set to the number of args which have required = true
 * type: command type, useful if you want to only allow certain users to run commands with certain types, etc.
-* allowedUsers: a property not used by default, but useful if you want to restrict a command to multiple users.
+* allowedUsers: a property not used by default (it's set to []), but useful if you want to restrict a command to multiple users.
 
 If you want to use allowedUsers, you should override Command.prototype.canRun !
-
 
 #### Methods
 
