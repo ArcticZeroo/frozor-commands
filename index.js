@@ -1,7 +1,7 @@
 require('./lib/polyfill');
 
-const Command = require('./lib/Command').Command;
-const CommandArg = require('./lib/Command').CommandArg;
+const {Command, CommandArg} = require('./lib/Command');
 const CommandHandler = require('./lib/CommandHandler');
+const LegacyConvert = require('./lib/LegacyConvert');
 
-module.exports = {Command, CommandArg, CommandHandler};
+module.exports = {Command, CommandArg, CommandHandler, LegacyConvert};
