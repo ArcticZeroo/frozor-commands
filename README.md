@@ -58,6 +58,8 @@ class EchoCommand extends Command{
 This can, of course, be used in conjunction with other arguments, but generally this should be the last argument in your array.
 
 ```javascript
+const {Command, CommandArg} = require('frozor-commands');
+
 class SayHello extends Command{
     constructor(){
         // Here we use ES6 spread syntax to avoid having to use .concat, but concat works too.
@@ -72,7 +74,7 @@ class SayHello extends Command{
         * there are, or based on the command it could
         * just be ignored.
         */
-        let name = msg.args[0]
+        let name = msg.args[0];
         
         // Set mention to false here so it doesn't mention them
         msg.reply(`Hey there, ${name}}`, false);
@@ -180,17 +182,18 @@ Handles commands, of course! This is where commands are registered and run.
 
 #### Constructor
 
-`SomeBot bot, Object messageFormatter`
+`Object options`
 
-#### Properties
+#### Properties (options)
 
 * bot: this is the bot that is, by default, passed to all commands. You can omit this when instantiating the class, but you should probably pass it in the `handle` method if you do that.
-* formatter: this is an object which contains methods for formatting messages. All formatters are used in a `message.reply` call, with the exception of logger which is used for `console.log`. Unless otherwise noted, the method takes the parameters (message, command, bot)
-    * nocommand: WHen a user runs a nonexistent command
+    * This property is only used when calling the command and when calling formatters (see below), so it doesn't matter what this is. It could be Slack, Discord, Skype, etc.
+* formatter: this is an object which contains methods for formatting messages. All formatters are used in a `message.reply` call, with the exception of logger which is used for `console.log`. Unless otherwise noted, the method takes the parameters `(message, command, bot, extra)`
+    * nocommand: When a user runs a nonexistent command
     * minargs: When the user has not entered enough args
     * maxargs: When the user entered too many args
-    * error: When the command failed, takes an additional property for the error raised (e.g. (msg, cmd, bot, error))
-    * logger: Formats the message to console.log when a user runs a command, takes an additional property (boolean) for the command's success (e.g. (msg, cmd, bot success)).
+    * error: When the command failed, takes an additional property for the error raised (e.g. (msg, cmd, bot, extra error))
+    * logger: Formats the message to console.log when a user runs a command, takes an additional property (boolean) for the command's success (e.g. (msg, cmd, bot, extra, success)).
     * permission: When the user is unable to use the command, which can happen if canRun is false
 * runCommand: this method is called when all other checks have passed and the handler is ready to run the command. You can override this to perform whatever tasks you would like, including completely ignoring the command if you wanted to for whatever reason.
 * commands: an Object containing all the commands.
@@ -200,11 +203,15 @@ If you want to override `formatter`, pass an object for the parameter `messageFo
 Example:
 
 ```javascript
-const commands = new CommandHandler(MyBot, {
-    // Override minargs with a custom message
-    minargs: (msg, cmd, bot)=> `You didn't enter enough args!`,
-    // Don't console.log
-    logger: ()=> false
+const myBot = require('./bot');
+const commands = new CommandHandler({
+    formatter: {
+       // Override minargs with a custom message
+       minargs: (msg, cmd, bot, extra)=> `You didn't enter enough args!`,
+       // Don't console.log the command usage
+       logger: ()=> false
+   },
+   bot: myBot
 });
 ```
 
@@ -218,16 +225,21 @@ Takes arguments (name, command) and adds it to the commands list
 
 Takes a Command argument and adds it and all its aliases to the commands list by calling `add`
 
+##### populate
+
+Not yet implemented. This will take all files in a given directory, check if their constructor inherits command, and if so, register it.
+
 ##### process
 
 This is how commands are processed. This takes arguments (message, extra, bot), where
 
 * message: the message that triggered the command to be invoked. Required properties listed below.
     * args: an array representing the arguments passed to it.
-    * commandName: the command the user is attempting to invoke
-    * reply: a method that takes a string argument and replies in some way to the user. This is not necessary if you override the formatter to return false for all (non-logger) events.
-* extra: An (optional) object that can contain any extra data you want to pass to your comomands. This could be the existence of other bots, some variables you want to pass, or anything else you'd like the command to have available (since, in practice, your commands should be separated from your main script). This defaults to just {}
-* bot: An (optional) bot to use instead of the bot you may or may not have provided in the constructor.
+    * commandName: the command name the user is attempting to invoke, e.g. `help`
+    * reply: a method that takes a string argument and replies in some way to the user. This is not a required method if you override the formatter to return false for all (non-logger) events. However, it is incredibly useful inside commands themselves.
+* extra: An (optional) object that can contain any extra data you want to pass to your comomands. This could be the existence of other bots, some variables you want to pass, or anything else you'd like the command to have available (since, in practice, your commands should be separated from your main script). This defaults to just {}.
+    * Instead of using globals, consider putting helper methods inside the extra.
+* bot: An (optional) bot to use instead of the bot you may or may not have provided in the constructor. If this is not provided, the bot will come from `this.bot`, so if none was provided in the constructor, you need to include a bot here.
 
 This method does all the following:
 
@@ -241,6 +253,7 @@ This method does all the following:
     * If not, this is where the `maxargs` formatter is used
 * Calls the method runCommand
     * If an error is caught (since the call is wrapped in a try catch), this is where the `error` formatter is used
+        * The `error` formatter may also be used in the `canRun` call.
     
 ## Putting It All Together
 
@@ -251,7 +264,7 @@ const SlackBot = require('frozor-slackbot');
 const {CommandArg, Command, CommandHandler} = require('frozor-commands');
 
 const bot = new SlackBot(process.env.SLACK_TOKEN);
-bot.commands = new CommandHandler(bot);
+bot.commands = new CommandHandler({bot: bot});
 
 class HelloCommand extends Command{
     constructor(){
