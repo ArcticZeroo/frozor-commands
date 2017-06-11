@@ -190,6 +190,9 @@ Command.prototype.canRun = async function (msg, bot) {
         }
         
         return this.allowedUsers.includes(slackUser.name);
+    } else {
+        // We'll just assume they can run it.
+        return true;
     }
 };
 ```
