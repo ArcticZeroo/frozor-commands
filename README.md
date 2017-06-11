@@ -5,11 +5,19 @@ Easy to use command creation system!
 ## Installation
 `npm i --save frozor-commands`
 
-*Note: This documentation is unfinished.*
+*Note: This documentation is unfinished. The module itself is still undergoing some design changes. As I update I will try to keep the documentation updated as well, but sometimes lag behind. Feel free to open a pull request if you would like to contribute to the module or the readme.*
 
 ## Usage
 
-The module exports properties equivalent to the classes listed below, e.g. FrozorCommands.Command
+The module exports properties are equivalent to the names of the classes listed below.
+```javascript
+const FrozorCommands = require('frozor-commands');
+
+FrozorCommands.Command // The command class
+FrozorCommands.CommandArg // The command arg class
+FrozorCommands.CommandHandler // the command handler class
+// etc
+```
 
 ### CommandArg Class
 #### Description
@@ -39,7 +47,13 @@ Example:
 ```javascript
 class EchoCommand extends Command{
     constructor(){
-        super("echo", [], "Echoes stuff back to you!", CommandArg.getVariableArgs(50, 'text', 'String', true))
+        super({
+            name: 'echo',
+            // Aliases is optional, but I'm including it just for my own sanity.
+            aliases: [],
+            description: 'Echoes stuff back to you!',
+            args: CommandArg.getVariableArgs(50, 'text', 'String', true)
+        })
     }
     
     run(msg, bot){
@@ -63,7 +77,11 @@ const {Command, CommandArg} = require('frozor-commands');
 class SayHello extends Command{
     constructor(){
         // Here we use ES6 spread syntax to avoid having to use .concat, but concat works too.
-        super("echo", [], "Say hi to the bot!", [new CommandArg('user_name', 'String', true), ...CommandArg.getVariableArgs(50, 'text', 'String', false)])
+        super({
+            name: 'echo',
+            description: 'Say hi to the bot!',
+            args: [new CommandArg('user_name', 'String', true), ...CommandArg.getVariableArgs(50, 'text', 'String', false)]
+        })
     }
     
     run(msg, bot){
@@ -92,7 +110,9 @@ Example return value for optional with type `String` and name `text`: `[String t
 Example return value for required with type `String` and name `text`: `<String text>`
 
 #### parseArgs
-Returns an object based on parsed arguments in an array.
+Takes an array of strings as its input, and returns an object based on parsed arguments in an array.
+
+If you only have a string/message text and want to parse it, the following can be used to get a message's args: `msg.text.split(' ').filter((m)=> m.trim() !== '');`. This prevents users from accidentally entering blank spaces as arguments, for instance on mobile.
 
 Properties can be represented in a few ways
 * key=value
@@ -155,13 +175,21 @@ In some cases, you may want to override canRun for all commands in your program.
 Example usage (with frozor-slackbot API):
 
 ```javascript
+// Make sure this is not an arrow function! If so, you won't be able to use `this` as if you were in the Command class.
 Command.prototype.canRun = async function (msg, bot) {
+    // If the command only allows certain users to run it...
     if(this.allowedUsers.length > 0){
-        if(bot.api.cache.users.hasOwnProperty(msg.user.id)){
-            return (this.allowedUsers.indexOf(bot.api.cache.users[msg.user.id].name) > -1);
-        }else{
+        // Get the user from the API's storage
+        let slackUser;
+        try {
+            slackUser = await bot.api.storage.users.get(msg.user.id);
+        } catch (e) {
+            // Something went wrong when grabbing the user
+            // So we just say they can't run it.
             return false;
         }
+        
+        return this.allowedUsers.includes(slackUser.name);
     }
 };
 ```
@@ -172,7 +200,7 @@ This is the method called when a user actually runs your command. It is passed t
 
 This must use node's `async` keyword, but nothing needs to be returned.
 
-If your method raises an unhandled exception, the CommandHandler will let the user know an exception occurred.
+If your method raises an unhandled exception, the CommandHandler will let the user know an exception occurred. However, you must still catch all promises, since node does not allow that to be caught.
 
 ### CommandHandler
 
@@ -263,7 +291,10 @@ This example uses the frozor-slackbot api
 const SlackBot = require('frozor-slackbot');
 const {CommandArg, Command, CommandHandler} = require('frozor-commands');
 
+// Get the slack token from env!
 const bot = new SlackBot(process.env.SLACK_TOKEN);
+
+// Set the commandHandler in the bot, useful so we don't have to deal with global variables, etc.
 bot.commands = new CommandHandler({bot: bot});
 
 class HelloCommand extends Command{
@@ -278,7 +309,11 @@ class HelloCommand extends Command{
 
 class SpeedCommand extends Command{
     constructor(){
-        super('speed', ['ping', 'speedtest', 'pingtest'], 'See how long it takes to process a command!')
+        super({
+            name: 'speed',
+            aliases: ['ping', 'speedtest', 'pingtest'],
+            description: 'See how long it takes to process a command!'
+        })
     }
     
     async run(message, bot, extra){
@@ -286,18 +321,71 @@ class SpeedCommand extends Command{
     }
 }
 
+// Add the commands to the commandHandler
 bot.commands.register(new HelloCommand());
 bot.commands.register(new SpeedCommand());
 
+// Initialize the bot, which connects it to slack's event system
 bot.init();
 
+// When we get a message...
 bot.on('message', (msg)=>{
+    // Check if it starts with our prefix (!)
     if(msg.startsWith('!')){
+        // Get args (this is a naive way, but works for this example)
         msg.args = msg.text.split(' ');
+        
+        // To run a command, we need to have commandName as a property on the message.
+        // We set it by taking the first argument of the message, and removing the first character, which is our prefix (!)
         msg.commandName = msg.args.shift().substr(1);
+        
+        // Process the command, and set the `extra` to `startTime: Date.now()`
         bot.commands.process(msg, {startTime: Date.now()});
     }
 });
 ```
 
-In this example, we've initialized a SlackBot and given it two commands: 'hello', and 'speed'. Each time the bot receives a message, it's checked for the command prefix (in this case a '!'), and if the prefix matches this command prefix, the command is processed. If the user provided too many or too few args, the bot will reply with a message letting them know such. If the command runs but hits an error, the bot will also let them know such.
+In this example, we've initialized a SlackBot and given it two commands: 'hello', and 'speed'. 
+Each time the bot receives a message, it's checked for the command prefix (in this case a '!'), and if the prefix matches this command prefix, the command is processed. 
+If the user provided too many or too few args, the bot will reply with a message letting them know such. If the command runs but hits an error, the bot will also let them know such.
+
+I wouldn't recommend directly copying this if you are writing a bot, because often times you should incorporate more robust logic before running a command. For instance, you should check that the message sender is not the bot.
+
+### LegacyConvert
+
+#### Description
+
+This is a method that allows people using a (very) old version of `frozor-commands` to update to the newest without doing any extra work, though you should really update it, since some stuff like Arguments gets really... weird.
+
+If you ever used `frozor-commands` back when commands were a gigantic object like shown below, you may find this useful. If you have never seen the below, you can safely ignore this method.
+
+```javascript
+const commands = {
+    hello : {
+        description: 'say hi to the bot!',
+        args: {
+            min: 0,
+            max: 1000
+        },
+        process: (slackBot, commandMessage, extra)=>{
+            // ew
+        }
+    },
+    hi: {
+        type: 'alias',
+        alias: 'hello'
+    }
+}
+
+module.exports = new CommandUtil(commands);
+```
+
+This was not exactly optimal, and the new `frozor-commands` system allows for you to not want to die every time you use it, and for more flexibility.
+
+To convert:
+
+1. Import the `LegacyConvert` property from `frozor-commands` in your command file(s)
+2. replace `new CommandUtil(commands)` with `LegacyConvert(commands)`.
+3. That's it!
+
+The object returned by LegacyConvert() is an Array of `Command` instances, named `LegacyCommand`. You can safely pass these _directly_ to a `CommandHandler`'s `.register()`.
