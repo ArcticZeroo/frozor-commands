@@ -24,5 +24,6 @@
   },
   "engines": {
     "node": ">=7.6.0"
-  }
+  },
+  "repository": "https://github.com/ArcticZeroo/frozor-commands/"
 }
