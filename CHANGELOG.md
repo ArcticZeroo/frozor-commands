@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.0.3]
+### Fixed
+- Fixed `Command` args again... I really should write some tests for this lib.
+- Fixed `CommandParent` along with the above
+
 ## [4.0.2]
 ### Fixed
 
