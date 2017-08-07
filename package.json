@@ -1,11 +1,8 @@
 {
   "name": "frozor-commands",
-  "version": "3.2.11",
-  "description": "Command system",
+  "version": "4.0.0",
+  "description": "Easy to use command system for Node.JS!",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [
     "commands",
     "command",
@@ -15,12 +12,14 @@
     "command parse",
     "argument parse",
     "command handler",
-    "slack commands"
+    "slack commands",
+    "frozor commands"
   ],
-  "author": "",
+  "author": "ArcticZeroo",
   "license": "ISC",
   "dependencies": {
-    "chalk": "^1.1.3"
+    "chalk": "^1.1.3",
+    "djs-collection": "0.0.5"
   },
   "engines": {
     "node": ">=7.6.0"
