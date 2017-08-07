@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.10]
+### Fixed
+- Another dumb issue causing an error to be thrown.
+
 ## [4.0.9]
 ### Fixed
 - A dumb typo causing `CommandParent` to crash upon calls to `act`.
