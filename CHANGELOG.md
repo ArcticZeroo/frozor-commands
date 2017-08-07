@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.5]
+### Added
+- `CommandParent.prototype.subCommandNotProvided` property to reply to users that do not provide a sub-command... obviously.
+
+###Fixed
+
+- An issue where `CommandParent` would fail if it is a child of another parent, and the user did not provide any args to use as a sub-command.
+
 ## [4.0.4] 
 ### Fixed
 - subCommandFail will no longer stringify as an arrow function...
