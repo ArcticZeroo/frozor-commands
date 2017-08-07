@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.1]
+### Fixed
+- I forgot to add a module.exports for CommandParent...
+
 ## [4.0.0]
 ### Added
 
