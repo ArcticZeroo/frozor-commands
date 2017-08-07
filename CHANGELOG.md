@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.4] 
+### Fixed
+- subCommandFail will no longer stringify as an arrow function...
+
 ## [4.0.3]
 ### Fixed
 - Fixed `Command` args again... I really should write some tests for this lib.
