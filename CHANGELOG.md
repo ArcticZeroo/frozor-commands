@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.7]
+### Changed
+- `CommandParent` now uses `CommandParent.prototype.act` to act upon sub-commands, and you should, too, if you're not just using the default handling for it.
+
 ## [4.0.5]
 ### Added
 - `CommandParent.prototype.subCommandNotProvided` property to reply to users that do not provide a sub-command... obviously.
