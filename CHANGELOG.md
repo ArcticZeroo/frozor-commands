@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.9]
+### Fixed
+- A dumb typo causing `CommandParent` to crash upon calls to `act`.
+
 ## [4.0.8] 
 ### Fixed
 - Signature of `CommandParent.prototype.act` is now `Promise act(action, msg, bot, extra)` to pass all properties to the child's `run` method. Not bumping minor because this version was out for maybe 2 minutes.
