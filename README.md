@@ -7,6 +7,8 @@ Easy to use command creation system!
 
 *Note: This documentation is unfinished. The module itself is still undergoing some design changes. As I update I will try to keep the documentation updated as well, but sometimes lag behind. Feel free to open a pull request if you would like to contribute to the module or the readme.*
 
+Later edit: Wow, how long did I spend on this documentation? I never even documented the files... Oh well, they're documented now.
+
 ## Usage
 
 The module exports properties are equivalent to the names of the classes listed below.
