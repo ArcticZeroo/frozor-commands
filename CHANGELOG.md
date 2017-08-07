@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.8] 
+### Fixed
+- Signature of `CommandParent.prototype.act` is now `Promise act(action, msg, bot, extra)` to pass all properties to the child's `run` method. Not bumping minor because this version was out for maybe 2 minutes.
+
 ## [4.0.7]
 ### Changed
 - `CommandParent` now uses `CommandParent.prototype.act` to act upon sub-commands, and you should, too, if you're not just using the default handling for it.
