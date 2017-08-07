@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.0.2]
+### Fixed
+
+- `args` property now properly converts functions, and will also instantiate constructors.
+- `CommandParent` no longer fails when no args are provided, and a default `arg` is also provided.
+
 ## [4.0.1]
 ### Fixed
 - I forgot to add a module.exports for CommandParent...
