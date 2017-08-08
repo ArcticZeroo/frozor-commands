@@ -1,18 +1,25 @@
 # Changelog
 
 ## [4.0.10]
-### Fixed
-- Another dumb issue causing an error to be thrown.
+## Changed
+- `subCommandNotProivided` and `subCommandFail` are now methods.
+
+## Fixed
+- This changelog skipping 4.0.6, because I can't count apparently.
 
 ## [4.0.9]
 ### Fixed
+- Another dumb issue causing an error to be thrown.
+
+## [4.0.8]
+### Fixed
 - A dumb typo causing `CommandParent` to crash upon calls to `act`.
 
-## [4.0.8] 
+## [4.0.7] 
 ### Fixed
 - Signature of `CommandParent.prototype.act` is now `Promise act(action, msg, bot, extra)` to pass all properties to the child's `run` method. Not bumping minor because this version was out for maybe 2 minutes.
 
-## [4.0.7]
+## [4.0.6]
 ### Changed
 - `CommandParent` now uses `CommandParent.prototype.act` to act upon sub-commands, and you should, too, if you're not just using the default handling for it.
 
