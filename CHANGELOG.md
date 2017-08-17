@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.0.11]
+## Added
+- A working version of `CommandHandler.prototype.populate` now exists, so use it! (This was previously erroneously listed under 4.0.4, even though it wasn't actually there)
+## Changed
+- Use the terminology 'client' in properties/docs instead of 'bot'
+- `CommandHandler.prototype.add` and `ComamndHandler.prototype.remove` are now private.
+## Fixed
+- An issue where `CommandHandler.prototype.remove` calls didn't actually do anything because it was still using `delete`
+
 ## [4.0.10]
 ## Changed
 - `subCommandNotProivided` and `subCommandFail` are now methods.
@@ -17,7 +26,7 @@
 
 ## [4.0.7] 
 ### Fixed
-- Signature of `CommandParent.prototype.act` is now `Promise act(action, msg, bot, extra)` to pass all properties to the child's `run` method. Not bumping minor because this version was out for maybe 2 minutes.
+- Signature of `CommandParent.prototype.act` is now `Promise act(action, msg, client, extra)` to pass all properties to the child's `run` method. Not bumping minor because this version was out for maybe 2 minutes.
 
 ## [4.0.6]
 ### Changed
@@ -57,7 +66,6 @@
 - A fancy new `CommandParent` class! Use this for sub-commands. All you have to do is provide instances of `Command` or `CommandParent` to the constructor in an Array called `children`.
 - jsdocs to a bunch of stuff
 - `CommandHandler` now has properties for `defaultHelpFormatter` and `defaultHelpFilter`, feel free to use this in conjunction with `CommandHandler.prototype.getHelpStatement`.
-- A working version of `CommandHandler.prototype.populate` now exists, so use it!
 - `Command`s now have `examples` and `help` as properties. Both are used in the help statement by default.
 - Speaking of the above, `Command` now has a `getHelpStatement()` method. You may want to override this if you're not on discord or slack, since it will look weird. Either way, it'll probably look weird.
 

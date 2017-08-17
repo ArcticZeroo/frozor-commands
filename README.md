@@ -58,7 +58,7 @@ class EchoCommand extends Command{
         })
     }
     
-    run(msg, bot){
+    run(msg, client){
         /*
         * Because required was set to true above,
         * there must be at least 1 element for the
@@ -81,12 +81,12 @@ class SayHello extends Command{
         // Here we use ES6 spread syntax to avoid having to use .concat, but concat works too.
         super({
             name: 'echo',
-            description: 'Say hi to the bot!',
+            description: 'Say hi to the client!',
             args: [new CommandArg('user_name', 'String', true), ...CommandArg.getVariableArgs(50, 'text', 'String', false)]
         })
     }
     
-    run(msg, bot){
+    run(msg, client){
         /*
         * Because required was set to false above,
         * there can be between 0 and 50 text args.
@@ -170,7 +170,7 @@ An example output would look something like one of these:
 
 ##### canRun
 
-This method must be async (using the node 7.6+ keyword) and return a boolean indicating whether the command can be run. It is passed args (msg, bot, extra). You do not have to include this method, because by default it just reutrns true.
+This method must be async (using the node 7.6+ keyword) and return a boolean indicating whether the command can be run. It is passed args (msg, client, extra). You do not have to include this method, because by default it just reutrns true.
 
 In some cases, you may want to override canRun for all commands in your program. You can do so by overriding the prototype for canRun.
 
@@ -178,13 +178,13 @@ Example usage (with frozor-slackbot API):
 
 ```javascript
 // Make sure this is not an arrow function! If so, you won't be able to use `this` as if you were in the Command class.
-Command.prototype.canRun = async function (msg, bot) {
+Command.prototype.canRun = async function (msg, client) {
     // If the command only allows certain users to run it...
     if(this.allowedUsers.length > 0){
         // Get the user from the API's storage
         let slackUser;
         try {
-            slackUser = await bot.api.storage.users.get(msg.user.id);
+            slackUser = await client.api.storage.users.get(msg.user.id);
         } catch (e) {
             // Something went wrong when grabbing the user
             // So we just say they can't run it.
@@ -201,7 +201,7 @@ Command.prototype.canRun = async function (msg, bot) {
 
 #### run
 
-This is the method called when a user actually runs your command. It is passed the args (msg, bot, extra).
+This is the method called when a user actually runs your command. It is passed the args (msg, client, extra).
 
 This must use node's `async` keyword, but nothing needs to be returned.
 
@@ -219,14 +219,14 @@ Handles commands, of course! This is where commands are registered and run.
 
 #### Properties (options)
 
-* bot: this is the bot that is, by default, passed to all commands. You can omit this when instantiating the class, but you should probably pass it in the `handle` method if you do that.
+* client: this is the client that is, by default, passed to all commands. You can omit this when instantiating the class, but you should probably pass it in the `handle` method if you do that.
     * This property is only used when calling the command and when calling formatters (see below), so it doesn't matter what this is. It could be Slack, Discord, Skype, etc.
-* formatter: this is an object which contains methods for formatting messages. All formatters are used in a `message.reply` call, with the exception of logger which is used for `console.log`. Unless otherwise noted, the method takes the parameters `(message, command, bot, extra)`
+* formatter: this is an object which contains methods for formatting messages. All formatters are used in a `message.reply` call, with the exception of logger which is used for `console.log`. Unless otherwise noted, the method takes the parameters `(message, command, client, extra)`
     * nocommand: When a user runs a nonexistent command
     * minargs: When the user has not entered enough args
     * maxargs: When the user entered too many args
-    * error: When the command failed, takes an additional property for the error raised (e.g. (msg, cmd, bot, extra error))
-    * logger: Formats the message to console.log when a user runs a command, takes an additional property (boolean) for the command's success (e.g. (msg, cmd, bot, extra, success)).
+    * error: When the command failed, takes an additional property for the error raised (e.g. (msg, cmd, client, extra error))
+    * logger: Formats the message to console.log when a user runs a command, takes an additional property (boolean) for the command's success (e.g. (msg, cmd, client, extra, success)).
     * permission: When the user is unable to use the command, which can happen if canRun is false
 * runCommand: this method is called when all other checks have passed and the handler is ready to run the command. You can override this to perform whatever tasks you would like, including completely ignoring the command if you wanted to for whatever reason.
 * commands: an Object containing all the commands.
@@ -236,15 +236,15 @@ If you want to override `formatter`, pass an object for the parameter `messageFo
 Example:
 
 ```javascript
-const myBot = require('./bot');
+const myBot = require(cliclient);
 const commands = new CommandHandler({
     formatter: {
        // Override minargs with a custom message
-       minargs: (msg, cmd, bot, extra)=> `You didn't enter enough args!`,
+       minargs: (msg, cmd, bclient extra)=> `You didn't enter enough args!`,
        // Don't console.log the command usage
        logger: ()=> false
    },
-   bot: myBot
+   bclient myBot
 });
 ```
 
@@ -264,7 +264,7 @@ Not yet implemented. This will take all files in a given directory, check if the
 
 ##### process
 
-This is how commands are processed. This takes arguments (message, extra, bot), where
+This is how commands are processed. This takes arguments (message, extra, bclient, where
 
 * message: the message that triggered the command to be invoked. Required properties listed below.
     * args: an array representing the arguments passed to it.
@@ -272,7 +272,7 @@ This is how commands are processed. This takes arguments (message, extra, bot), 
     * reply: a method that takes a string argument and replies in some way to the user. This is not a required method if you override the formatter to return false for all (non-logger) events. However, it is incredibly useful inside commands themselves.
 * extra: An (optional) object that can contain any extra data you want to pass to your comomands. This could be the existence of other bots, some variables you want to pass, or anything else you'd like the command to have available (since, in practice, your commands should be separated from your main script). This defaults to just {}.
     * Instead of using globals, consider putting helper methods inside the extra.
-* bot: An (optional) bot to use instead of the bot you may or may not have provided in the constructor. If this is not provided, the bot will come from `this.bot`, so if none was provided in the constructor, you need to include a bot here.
+* bclient An (optional) bclientto use instead of the bclientyou may or may not have provided in the constructor. If this is not provided, the bclientwill come from `this.bclient, so if none was provided in the constructor, you need to include a bclienthere.
 
 This method does all the following:
 
@@ -297,10 +297,10 @@ const SlackBot = require('frozor-slackbot');
 const {CommandArg, Command, CommandHandler} = require('frozor-commands');
 
 // Get the slack token from env!
-const bot = new SlackBot(process.env.SLACK_TOKEN);
+const bclient= new SlackBot(process.env.SLACK_TOKEN);
 
-// Set the commandHandler in the bot, useful so we don't have to deal with global variables, etc.
-bot.commands = new CommandHandler({bot: bot});
+// Set the commandHandler in the bclient useful so we don't have to deal with global variables, etc.
+bclientcommands = new CommandHandler({bclient bclient);
 
 class HelloCommand extends Command{
     constructor(){
@@ -321,20 +321,20 @@ class SpeedCommand extends Command{
         })
     }
     
-    async run(message, bot, extra){
+    async run(message, bclient extra){
         message.reply(`I took \`${Date.now() - extra.startTime}\` ms to process and run that command.`)
     }
 }
 
 // Add the commands to the commandHandler
-bot.commands.register(new HelloCommand());
-bot.commands.register(new SpeedCommand());
+bclientcommands.register(new HelloCommand());
+bclientcommands.register(new SpeedCommand());
 
-// Initialize the bot, which connects it to slack's event system
-bot.init();
+// Initialize the bclient which connects it to slack's event system
+bclientinit();
 
 // When we get a message...
-bot.on('message', (msg)=>{
+bclienton('message', (msg)=>{
     // Check if it starts with our prefix (!)
     if(msg.startsWith('!')){
         // Get args (this is a naive way, but works for this example)
@@ -345,16 +345,16 @@ bot.on('message', (msg)=>{
         msg.commandName = msg.args.shift().substr(1);
         
         // Process the command, and set the `extra` to `startTime: Date.now()`
-        bot.commands.process(msg, {startTime: Date.now()});
+        bclientcommands.process(msg, {startTime: Date.now()});
     }
 });
 ```
 
 In this example, we've initialized a SlackBot and given it two commands: 'hello', and 'speed'. 
-Each time the bot receives a message, it's checked for the command prefix (in this case a '!'), and if the prefix matches this command prefix, the command is processed. 
-If the user provided too many or too few args, the bot will reply with a message letting them know such. If the command runs but hits an error, the bot will also let them know such.
+Each time the bclientreceives a message, it's checked for the command prefix (in this case a '!'), and if the prefix matches this command prefix, the command is processed. 
+If the user provided too many or too few args, the bclientwill reply with a message letting them know such. If the command runs but hits an error, the bclientwill also let them know such.
 
-I wouldn't recommend directly copying this if you are writing a bot, because often times you should incorporate more robust logic before running a command. For instance, you should check that the message sender is not the bot.
+I wouldn't recommend directly copying this if you are writing a bclient because often times you should incorporate more robust logic before running a command. For instance, you should check that the message sender is not the bclient
 
 ### LegacyConvert
 
@@ -367,7 +367,7 @@ If you ever used `frozor-commands` back when commands were a gigantic object lik
 ```javascript
 const commands = {
     hello : {
-        description: 'say hi to the bot!',
+        description: 'say hi to the bclient',
         args: {
             min: 0,
             max: 1000
