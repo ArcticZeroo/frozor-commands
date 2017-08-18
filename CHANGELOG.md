@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.12]
+## Fixed
+- An issue where instanceof could not be called because it was checking an object instead of a constructor.
+
 ## [4.0.11]
 ## Added
 - A working version of `CommandHandler.prototype.populate` now exists, so use it! (This was previously erroneously listed under 4.0.4, even though it wasn't actually there)
