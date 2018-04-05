@@ -394,3 +394,16 @@ To convert:
 3. That's it!
 
 The object returned by LegacyConvert() is an Array of `Command` instances, named `LegacyCommand`. You can safely pass these _directly_ to a `CommandHandler`'s `.register()`.
+
+## Generate Documentation
+
+'lib/docs.js' has the capability to generate documentation for all commands in a given project.
+
+It's pretty easy to use:
+
+1. require docs
+2. call it with options, ensuring that you give it either handler (the CommandHandler) or a list of Command instances at minimum
+    - You can also choose to set additional options here. The most common one that you probably want to change would be the 'config' property. You can see what the default looks like in config/docs.js. You don't have to implement every one if you want to just change one, since the default options setter is deep.
+    - Also, if you want it all in one file, either make `output` a string, or set `output.separate` to something false/falsy. If separate is false (automatically or otherwise), 'docs.md' will be appended to the path if the path doesn't end in .md.
+3. ???
+4. Profit!

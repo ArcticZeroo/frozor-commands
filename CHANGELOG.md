@@ -1,5 +1,15 @@
 # Changelog
 
+## [5.0.0]
+## Added
+- An API to allow easy documentation generation for commands.
+- Command#addInfiniteArgs() which sets the command to be able to have infinite max args
+- Command#parse(data) which takes in a message or the args array and parses it with CommandArg#parseCommandArgs
+
+## Changed
+- CommandHandler by default now allows commands to be run when the user has typed in more than the normal maximum args. The additional args are sliced off the array.
+    - disable this by setting the option enforceArgLimits to false in the call to initialize it, or after initialization by setting it.
+
 ## [4.0.12]
 ## Fixed
 - An issue where instanceof could not be called because it was checking an object instead of a constructor.
