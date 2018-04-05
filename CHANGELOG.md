@@ -1,33 +1,37 @@
 # Changelog
 
+## [5.0.1]
+### Fixed
+- Fixes to make docs actually work... and export it. Whoops.
+
 ## [5.0.0]
-## Added
+### Added
 - An API to allow easy documentation generation for commands.
 - Command#addInfiniteArgs() which sets the command to be able to have infinite max args
 - Command#parse(data) which takes in a message or the args array and parses it with CommandArg#parseCommandArgs
 
-## Changed
+### Changed
 - CommandHandler by default now allows commands to be run when the user has typed in more than the normal maximum args. The additional args are sliced off the array.
     - disable this by setting the option enforceArgLimits to false in the call to initialize it, or after initialization by setting it.
 
 ## [4.0.12]
-## Fixed
+### Fixed
 - An issue where instanceof could not be called because it was checking an object instead of a constructor.
 
 ## [4.0.11]
-## Added
+### Added
 - A working version of `CommandHandler.prototype.populate` now exists, so use it! (This was previously erroneously listed under 4.0.4, even though it wasn't actually there)
 ## Changed
 - Use the terminology 'client' in properties/docs instead of 'bot'
 - `CommandHandler.prototype.add` and `ComamndHandler.prototype.remove` are now private.
-## Fixed
+### Fixed
 - An issue where `CommandHandler.prototype.remove` calls didn't actually do anything because it was still using `delete`
 
 ## [4.0.10]
-## Changed
+### Changed
 - `subCommandNotProivided` and `subCommandFail` are now methods.
 
-## Fixed
+### Fixed
 - This changelog skipping 4.0.6, because I can't count apparently.
 
 ## [4.0.9]

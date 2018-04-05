@@ -1,6 +1,8 @@
-module.exports = {
-    h1: '#', h2: '##', h3: '###', h4: '####',
+const HEADERS = {
+    h1: '#', h2: '##', h3: '###', h4: '####'
+};
 
+const METHODS = {
     capitalize (str) {
         return str[0].toUpperCase() + str.substr(1);
     },
@@ -12,33 +14,46 @@ module.exports = {
         if (num === Number.POSITIVE_INFINITY) {
             return 'Infinite';
         }
+    }
+};
+
+const FORMAT = {
+    code (text) {
+        return '`' + text + '`'
     },
+    bold (text) {
+        return '*' + text + '*'
+    }
+};
 
-
+module.exports = {
     title: (command) => {
-        return this.h2 + ' ' + this.capitalize(command.name);
+        return HEADERS.h2 + ' ' + METHODS.capitalize(command.name) + ' Command';
     },
     aliases: (command) => {
-        return [this.h3 + ' Aliases', command.aliases.join(', ')];
+        return [HEADERS.h3 + ' Aliases', command.aliases.join(', ')];
     },
     description: (command) => {
-        return [this.h3 + ' Description', command.description];
+        return [HEADERS.h3 + ' Description', command.description];
     },
     usage: (command) => {
-        return [this.h3 + ' Usage', command.getUsageStatement()];
+        return [HEADERS.h3 + ' Usage', FORMAT.code(command.getUsageStatement())];
+    },
+    examples: (command) => {
+        return [HEADERS.h3 + ' Examples', command.examples.map(FORMAT.code).join('\n\n')];
     },
     args: (command) => {
         const data = [];
 
-        data.push(this.h3 + ' Arguments');
+        data.push(HEADERS.h3 + ' Arguments');
 
         if (command.args.length === 0) {
             data.push('This command requires no arguments.');
             return data;
         }
 
-        data.push(this.h4 + ' Min Args: ' + this.prettifyNum(command.minArgs));
-        data.push(this.h4 + ' Max Args: ' + this.prettifyNum(command.maxArgs));
+        data.push(HEADERS.h4 + ' Min Args: ' + FORMAT.code(METHODS.prettifyNum(command.minArgs)));
+        data.push(HEADERS.h4 + ' Max Args: ' + FORMAT.code(METHODS.prettifyNum(command.maxArgs)));
 
         data.push('Name|Description|Required|Type');
 

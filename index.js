@@ -6,4 +6,4 @@ const LegacyConvert = require('./lib/LegacyConvert');
 const CommandParent = require('./lib/CommandParent');
 const docs = require('./lib/docs');
 
-module.exports = {Command, CommandArg, CommandHandler, LegacyConvert, CommandParent};
+module.exports = {Command, CommandArg, CommandHandler, LegacyConvert, CommandParent, docs };
