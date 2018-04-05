@@ -7,7 +7,7 @@ const METHODS = {
         return str[0].toUpperCase() + str.substr(1);
     },
     prettifyNum (num) {
-        if (num === 0) {
+        if (num === 0 || !num) {
             return 'None';
         }
 

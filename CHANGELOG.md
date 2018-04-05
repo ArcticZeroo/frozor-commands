@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.2]
+### Fixed
+- prettifyNumber now outputs None for undefined numbers
+
 ## [5.0.1]
 ### Fixed
 - Fixes to make docs actually work... and export it. Whoops.
