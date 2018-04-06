@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.3]
+### Fixed
+- prettifyNumber now outputs the number when it's not 0 or undefined...
+
 ## [5.0.2]
 ### Fixed
 - prettifyNumber now outputs None for undefined numbers

@@ -14,6 +14,8 @@ const METHODS = {
         if (num === Number.POSITIVE_INFINITY) {
             return 'Infinite';
         }
+
+        return num;
     }
 };
 
