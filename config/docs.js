@@ -57,12 +57,15 @@ module.exports = {
         data.push(HEADERS.h4 + ' Min Args: ' + FORMAT.code(METHODS.prettifyNum(command.minArgs)));
         data.push(HEADERS.h4 + ' Max Args: ' + FORMAT.code(METHODS.prettifyNum(command.maxArgs)));
 
-        data.push('| Name | Description | Required | Type |');
-        data.push('|------|-------------|----------|------|');
+        const table = [];
+        table.push('| Name | Description | Required | Type |');
+        table.push('|------|-------------|----------|------|');
 
         for (const arg of command.args) {
-            data.push(`|${arg.name || ''}|${arg.description || ''}|${arg.required != null ? (arg.required ? 'Yes' : 'No') : ''}|${arg.type || ''}|`);
+            table.push(`|${arg.name || ''}|${arg.description || ''}|${arg.required != null ? (arg.required ? 'Yes' : 'No') : ''}|${arg.type || ''}|`);
         }
+
+        data.push(table.join('\n'));
 
         return data;
     }
