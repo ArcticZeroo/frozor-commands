@@ -240,11 +240,11 @@ const myBot = require(cliclient);
 const commands = new CommandHandler({
     formatter: {
        // Override minargs with a custom message
-       minargs: (msg, cmd, bclient extra)=> `You didn't enter enough args!`,
+       minargs: (msg, cmd, client, extra)=> `You didn't enter enough args!`,
        // Don't console.log the command usage
        logger: ()=> false
    },
-   bclient myBot
+   client, myBot
 });
 ```
 
@@ -264,7 +264,7 @@ Not yet implemented. This will take all files in a given directory, check if the
 
 ##### process
 
-This is how commands are processed. This takes arguments (message, extra, bclient, where
+This is how commands are processed. This takes arguments (message, extra, client, where
 
 * message: the message that triggered the command to be invoked. Required properties listed below.
     * args: an array representing the arguments passed to it.
@@ -272,7 +272,7 @@ This is how commands are processed. This takes arguments (message, extra, bclien
     * reply: a method that takes a string argument and replies in some way to the user. This is not a required method if you override the formatter to return false for all (non-logger) events. However, it is incredibly useful inside commands themselves.
 * extra: An (optional) object that can contain any extra data you want to pass to your comomands. This could be the existence of other bots, some variables you want to pass, or anything else you'd like the command to have available (since, in practice, your commands should be separated from your main script). This defaults to just {}.
     * Instead of using globals, consider putting helper methods inside the extra.
-* bclient An (optional) bclientto use instead of the bclientyou may or may not have provided in the constructor. If this is not provided, the bclientwill come from `this.bclient, so if none was provided in the constructor, you need to include a bclienthere.
+* client An (optional) client to use instead of the client you may or may not have provided in the constructor. If this is not provided, the client will come from `this.client`, so if none was provided in the constructor, you need to include a client here.
 
 This method does all the following:
 
@@ -297,10 +297,11 @@ const SlackBot = require('frozor-slackbot');
 const {CommandArg, Command, CommandHandler} = require('frozor-commands');
 
 // Get the slack token from env!
-const bclient= new SlackBot(process.env.SLACK_TOKEN);
+const client= new SlackBot(process.env.SLACK_TOKEN);
 
-// Set the commandHandler in the bclient useful so we don't have to deal with global variables, etc.
-bclientcommands = new CommandHandler({bclient bclient);
+
+// Set the commandHandler in the client useful so we don't have to deal with global variables, etc.
+clientcommands = new CommandHandler({client});
 
 class HelloCommand extends Command{
     constructor(){
@@ -321,20 +322,20 @@ class SpeedCommand extends Command{
         })
     }
     
-    async run(message, bclient extra){
+    async run(message, client, extra){
         message.reply(`I took \`${Date.now() - extra.startTime}\` ms to process and run that command.`)
     }
 }
 
 // Add the commands to the commandHandler
-bclientcommands.register(new HelloCommand());
-bclientcommands.register(new SpeedCommand());
+client.commands.register(new HelloCommand());
+client.commands.register(new SpeedCommand());
 
-// Initialize the bclient which connects it to slack's event system
-bclientinit();
+// Initialize the client which connects it to slack's event system
+client.init();
 
 // When we get a message...
-bclienton('message', (msg)=>{
+client.on('message', (msg)=>{
     // Check if it starts with our prefix (!)
     if(msg.startsWith('!')){
         // Get args (this is a naive way, but works for this example)
@@ -345,16 +346,16 @@ bclienton('message', (msg)=>{
         msg.commandName = msg.args.shift().substr(1);
         
         // Process the command, and set the `extra` to `startTime: Date.now()`
-        bclientcommands.process(msg, {startTime: Date.now()});
+        client.commands.process(msg, {startTime: Date.now()});
     }
 });
 ```
 
 In this example, we've initialized a SlackBot and given it two commands: 'hello', and 'speed'. 
-Each time the bclientreceives a message, it's checked for the command prefix (in this case a '!'), and if the prefix matches this command prefix, the command is processed. 
-If the user provided too many or too few args, the bclientwill reply with a message letting them know such. If the command runs but hits an error, the bclientwill also let them know such.
+Each time the client receives a message, it's checked for the command prefix (in this case a '!'), and if the prefix matches this command prefix, the command is processed. 
+If the user provided too many or too few args, the client will reply with a message letting them know such. If the command runs but hits an error, the client will also let them know such.
 
-I wouldn't recommend directly copying this if you are writing a bclient because often times you should incorporate more robust logic before running a command. For instance, you should check that the message sender is not the bclient
+I wouldn't recommend directly copying this if you are writing a client because often times you should incorporate more robust logic before running a command. For instance, you should check that the message sender is not the client
 
 ### LegacyConvert
 
@@ -367,7 +368,7 @@ If you ever used `frozor-commands` back when commands were a gigantic object lik
 ```javascript
 const commands = {
     hello : {
-        description: 'say hi to the bclient',
+        description: 'say hi to the client',
         args: {
             min: 0,
             max: 1000
