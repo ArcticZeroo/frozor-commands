@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.9]
+### Added
+- CommandParent and CommandHandler are both iterable now. Their iterators are generators which yield all of their relevant commands (all unique commands in the handler, and all unique children in the parent)
+
 ## [5.0.8]
 ### Added
 - You know that thing about Command constructors with strings I mentioned? Well... I forgot to add it then. All good now.
