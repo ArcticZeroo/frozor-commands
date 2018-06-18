@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.8]
+### Added
+- You know that thing about Command constructors with strings I mentioned? Well... I forgot to add it then. All good now.
+
 ## [5.0.7]
 ### Added
 - Command now has a parent property if it's a child of a CommandParent, which references that parent.
