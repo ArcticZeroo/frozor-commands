@@ -18,11 +18,15 @@
   "author": "ArcticZeroo",
   "license": "ISC",
   "dependencies": {
+    "@arcticzeroo/eslint-config": "^1.0.3",
     "chalk": "^1.1.3",
     "djs-collection": "0.0.5"
   },
   "engines": {
     "node": ">=7.6.0"
   },
-  "repository": "https://github.com/ArcticZeroo/frozor-commands/"
+  "repository": "https://github.com/ArcticZeroo/frozor-commands/",
+  "devDependencies": {
+    "eslint": "^4.19.1"
+  }
 }

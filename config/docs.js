@@ -21,41 +21,41 @@ const METHODS = {
 
 const FORMAT = {
     code (text) {
-        return '`' + text + '`'
+        return `\`${text}\``;
     },
     bold (text) {
-        return '*' + text + '*'
+        return `*${text}*`;
     }
 };
 
 module.exports = {
     title: (command) => {
-        return HEADERS.h2 + ' ' + METHODS.capitalize(command.name) + ' Command';
+        return `${HEADERS.h2} ${METHODS.capitalize(command.name)} Command`;
     },
     aliases: (command) => {
-        return [HEADERS.h3 + ' Aliases', command.aliases.join(', ')];
+        return [`${HEADERS.h3} Aliases`, command.aliases.join(', ')];
     },
     description: (command) => {
-        return [HEADERS.h3 + ' Description', command.description];
+        return [`${HEADERS.h3} Description`, command.description];
     },
     usage: (command) => {
-        return [HEADERS.h3 + ' Usage', FORMAT.code(command.getUsageStatement())];
+        return [`${HEADERS.h3} Usage`, FORMAT.code(command.getUsageStatement())];
     },
     examples: (command) => {
-        return [HEADERS.h3 + ' Examples', command.examples.map(FORMAT.code).join('\n\n')];
+        return [`${HEADERS.h3} Examples`, command.examples.map(FORMAT.code).join('\n\n')];
     },
     args: (command) => {
         const data = [];
 
-        data.push(HEADERS.h3 + ' Arguments');
+        data.push(`${HEADERS.h3} Arguments`);
 
         if (command.args.length === 0) {
             data.push('This command requires no arguments.');
             return data;
         }
 
-        data.push(HEADERS.h4 + ' Min Args: ' + FORMAT.code(METHODS.prettifyNum(command.minArgs)));
-        data.push(HEADERS.h4 + ' Max Args: ' + FORMAT.code(METHODS.prettifyNum(command.maxArgs)));
+        data.push(`${HEADERS.h4} Min Args: ${FORMAT.code(METHODS.prettifyNum(command.minArgs))}`);
+        data.push(`${HEADERS.h4} Max Args: ${FORMAT.code(METHODS.prettifyNum(command.maxArgs))}`);
 
         const table = [];
         table.push('| Name | Description | Required | Type |');

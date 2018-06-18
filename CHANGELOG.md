@@ -1,5 +1,15 @@
 # Changelog
 
+## [5.0.6]
+### Fixed
+- Not really sure how but a bunch of versions were skipped here.
+- I'm pretty sure CommandHandler.populate never actually worked, but it does now!
+- Also pretty sure CommandHandler.getHelpStatement didn't work. But again, it does now!
+- Fixed a bunch of random small issues... what the hell me?
+
+### Added
+- If all you care about is specifying a command name, just pass a string to the super call in your command's constructor
+
 ## [5.0.4]
 ### Fixed
 - The readme somehow was very wrong. 
