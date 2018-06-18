@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.7]
+### Added
+- Command now has a parent property if it's a child of a CommandParent, which references that parent.
+
 ## [5.0.6]
 ### Fixed
 - Not really sure how but a bunch of versions were skipped here.
