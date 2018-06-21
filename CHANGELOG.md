@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.10]
+### Fixed
+- There was a parsing error in CommandHandler.populate that was never noticed because nobody uses this module but me. It's fixed now.
+
 ## [5.0.9]
 ### Added
 - CommandParent and CommandHandler are both iterable now. Their iterators are generators which yield all of their relevant commands (all unique commands in the handler, and all unique children in the parent)
