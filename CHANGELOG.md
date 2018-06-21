@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.13]
+### Added
+- You can now call CommandHandler.register on a command that hasn't been initialized yet
+
 ## [5.0.11]
 ### Fixed
 - An issue where webstorm yelled at me to change something, but changing it made things worse.
