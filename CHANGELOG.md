@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.11]
+### Fixed
+- An issue where webstorm yelled at me to change something, but changing it made things worse.
+
 ## [5.0.10]
 ### Fixed
 - There was a parsing error in CommandHandler.populate that was never noticed because nobody uses this module but me. It's fixed now.
