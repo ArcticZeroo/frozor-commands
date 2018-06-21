@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.1.0]
+### Added
+- CommandParent now has a special usage statement for its children
+
 ## [5.0.13]
 ### Added
 - You can now call CommandHandler.register on a command that hasn't been initialized yet
