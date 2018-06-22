@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.0]
+### Changed/Added
+- CommandParent instances now have their own command handlers inside .children instead of a direct collection. This is so that arg handling on children works properly
+- Commands that are children of a parent now add their parents' names to their usage statement
+- CommandHandler.instantiate exists now, which returns an Array of instantiated commands from any kind of object where it can be found.
+- Formatter for CommandParents can now be specified with the 'formatter' property in passed super data
+
 ## [5.1.0]
 ### Added
 - CommandParent now has a special usage statement for its children
